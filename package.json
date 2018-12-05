@@ -1,0 +1,15 @@
+{
+  "name": "sample_project_01",
+  "version": "1.0.0",
+  "description": "Complete NodeJS Guide",
+  "main": "app.js",
+  "repository": "git@github.com:dmitrymarokhonov/nodejs_sample_project_01.git",
+  "author": "dmitry.marokhonov <dmitry.marokhonov@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.7"
+  }
+}
