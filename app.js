@@ -7,8 +7,8 @@ const pageNotFoundController = require("./controllers/404");
 
 const app = express();
 
-//app.set("view engine", "ejs");
-app.set("view engine", "pug");
+app.set("view engine", "ejs");
+// app.set("view engine", "pug");
 app.set("views", "views");
 
 const adminRoutes = require("./routes/admin");
