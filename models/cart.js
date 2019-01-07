@@ -36,4 +36,12 @@ module.exports = class Cart {
       });
     });
   }
+  static deleteProduct(id, productPrice) {
+    fs.readFile(p, (err, fileContent) => {
+      if (err) return;
+      const updatedCart = {...cart}; // takes all propeties of "cart" and puts the to new object ("updatedCart")
+      const productIndex = updatedCart.products.findIndex(prod => prod.id === id);
+      cart.totalPrice = productPrice;
+    });
+  }
 };
