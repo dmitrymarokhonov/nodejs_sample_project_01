@@ -4,7 +4,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const pageNotFoundController = require("./controllers/404");
-const db = require("./utils/database");
 
 const app = express();
 
@@ -13,8 +12,6 @@ app.set("views", "views");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
-
-db.execute("SELECT * from Products");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
