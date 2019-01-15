@@ -43,8 +43,8 @@ Cart.belongsToMany(Product, {through: CartItem});
 Product.belongsToMany(Cart, {through: CartItem});
 
 sequelize
-  .sync({force: true})
-  // .sync()
+  // .sync({force: true})
+  .sync()
   .then(result => {
     return User.findById(1);
   })
@@ -55,6 +55,7 @@ sequelize
     return Promise.resolve(user); // Promise.resolve() can be omitted because return is inside "then()" block
   })
   .then(user => {
-    app.listen(3000);
+    return user.createCart();
   })
+  .then(() => app.listen(3000))
   .catch(err => console.log(err));
