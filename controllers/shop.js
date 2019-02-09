@@ -58,6 +58,13 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
+  Product.findById(prodId)
+    .then(product => {
+      return req.user.addToCart(product);
+    })
+    .then(result => {
+      console.log(result);
+    });
   // let fetchedCart;
   // let newQuantity = 1;
   // req.user
@@ -135,7 +142,7 @@ exports.postOrder = (req, res, next) => {
 
 exports.getOrders = (req, res, next) => {
   req.user
-    .getOrders({include: ["products"]})
+    .getOrders({ include: ["products"] })
     .then(orders => {
       res.render("shop/orders", {
         docTitle: "Orders",
