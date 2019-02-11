@@ -2,9 +2,9 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const pageNotFoundController = require("./controllers/404");
-const mongoConnect = require("./utils/database").mongoConnect;
 const User = require("./models/user");
 
 const app = express();
@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res, next) => {
   User.findById(`5c5c2b031c9d440000e161ac`)
     .then(user => {
-      req.user = new User(user.name, user.email, user.cart, user._id );
+      req.user = new User(user.name, user.email, user.cart, user._id);
       next();
     })
     .catch(err => console.log(err));
@@ -32,6 +32,9 @@ app.use(shopRoutes);
 
 app.use(pageNotFoundController);
 
-mongoConnect(() => {
-  app.listen(3000);
-});
+mongoose
+  .connect(
+    "mongodb+srv://dmitry:KUyt17sX88iDUKnM@cluster0-qvwe4.mongodb.net/shop?retryWrites=true"
+  )
+  .then(() => app.listen(3000))
+  .catch(err => console.log(err));
