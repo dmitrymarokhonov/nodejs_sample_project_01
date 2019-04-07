@@ -60,7 +60,7 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDesc = req.body.description;
 
- Product.findById(prodId)
+  Product.findById(prodId)
     .then(product => {
       product.title = updatedTitle;
       product.price = updatedPrice;
@@ -77,7 +77,10 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
+    // .select("title price imageUrl -_id")
+    // .populate("userId", "name")
     .then(products => {
+      console.log(products);
       res.render("admin/products", {
         prods: products,
         docTitle: "Admin Products",
