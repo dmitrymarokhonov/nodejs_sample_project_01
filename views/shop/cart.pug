@@ -10,7 +10,7 @@ block content
             h1 #{p.title}
             h2 Quantity: #{p.cartItem.quantity}
             form(action="/cart-delete-item", method="post")
-              input(type="hidden", name="productId", value=`${p.id}`)
+              input(type="hidden", name="productId", value=`${p._id}`)
               button.btn.danger(type="submit") Delete
       hr
       .centered
