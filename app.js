@@ -2,6 +2,7 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const favicon = require("serve-favicon");
 const mongoose = require("mongoose");
 
 const pageNotFoundController = require("./controllers/404");
@@ -19,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  User.findById(`5c7bdcfe80e0a72b684a014a`)
+  User.findById('5d4049153b902028c05b7ffe')
     .then(user => {
       req.user = user;
       next();
@@ -29,19 +30,20 @@ app.use((req, res, next) => {
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+app.use(favicon(path.join(__dirname, 'images', 'icons8-laptop-50.png')));
 
 app.use(pageNotFoundController);
 
 mongoose
   .connect(
-    "mongodb+srv://dmitry:KUyt17sX88iDUKnM@cluster0-qvwe4.mongodb.net/mongoose_shop?retryWrites=true",
+    "mongodb+srv://dmitry:OvOTvIZHoxySg5PN@cluster0-qvwe4.mongodb.net/shop?retryWrites=true&w=majority",
     { useNewUrlParser: true }
   )
   .then(() => {
     User.findOne().then(user => {
       if (!user) {
         const user = new User({
-          name: "Dima",
+          name: "Dmitry Marokhonov",
           email: "dmitry.marokhnonov@gmail.com",
           cart: {
             items: []
