@@ -4,6 +4,6 @@ module.exports = (req, res, next) => {
     .render("404", {
       docTitle: "Page not found",
       path: "/404",
-      isAuthenticated: req.isLoggedIn
+      isAuthenticated: req.session.isLoggedIn
     });
 };

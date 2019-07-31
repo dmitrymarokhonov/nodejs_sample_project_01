@@ -34,14 +34,14 @@ app.use(
   session({ secret: "my secret", resave: false, saveUninitialized: false, store: store })
 );
 
-app.use((req, res, next) => {
-  User.findById("5d4049153b902028c05b7ffe")
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => console.log(err));
-});
+// app.use((req, res, next) => {
+//   User.findById("5d4049153b902028c05b7ffe")
+//     .then(user => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch(err => console.log(err));
+// });
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
