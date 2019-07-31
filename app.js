@@ -2,9 +2,10 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const favicon = require("serve-favicon");
+const mongoose = require("mongoose");
 
 const pageNotFoundController = require("./controllers/404");
-const mongoConnect = require("./utils/database").mongoConnect;
 const User = require("./models/user");
 
 const app = express();
@@ -19,9 +20,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  User.findById(`5c5c2b031c9d440000e161ac`)
+  User.findById('5d4049153b902028c05b7ffe')
     .then(user => {
-      req.user = new User(user.name, user.email, user.cart, user._id );
+      req.user = user;
       next();
     })
     .catch(err => console.log(err));
@@ -29,9 +30,28 @@ app.use((req, res, next) => {
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+app.use(favicon(path.join(__dirname, 'images', 'icons8-laptop-50.png')));
 
 app.use(pageNotFoundController);
 
-mongoConnect(() => {
-  app.listen(3000);
-});
+mongoose
+  .connect(
+    "mongodb+srv://dmitry:OvOTvIZHoxySg5PN@cluster0-qvwe4.mongodb.net/shop?retryWrites=true&w=majority",
+    { useNewUrlParser: true }
+  )
+  .then(() => {
+    User.findOne().then(user => {
+      if (!user) {
+        const user = new User({
+          name: "Dmitry Marokhonov",
+          email: "dmitry.marokhnonov@gmail.com",
+          cart: {
+            items: []
+          }
+        });
+        user.save();
+      }
+    });
+    app.listen(3000);
+  })
+  .catch(err => console.log(err));
