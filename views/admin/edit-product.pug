@@ -15,7 +15,7 @@ block content
                 input#imageUrl(type='text', name='imageUrl', value=editing && `${product.imageUrl}`)
             .form-control
                 label(for='price') Price
-                input#price(type='text', name='price', value=editing && `${product.price}`)
+                input#price(type='number', name='price', step='0.01', value=editing && `${product.price}`)
             .form-control
                 label(for='description') Description
                 textarea#description(name="description", rows="5") #{editing ? product.description : ""}
