@@ -6,7 +6,7 @@ block styles
 
 block content
     main
-        form.login-form(action='/login', method='POST')
+        form.login-form(action='/signup', method='POST')
             .form-control
                 label(for='email') E-Mail
                 input#email(type='email', name='email')
@@ -15,5 +15,5 @@ block content
                 input#password(type='password', name='password')
             .form-control
                 label(for='confirmPassword') Confirm Password
-                input#confirmPassword(type='password', name='password')
+                input#confirmPassword(type='password', name='confirmPassword')
             button.btn(type='submit') Signup

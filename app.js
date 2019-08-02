@@ -35,7 +35,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  if(!req.session.user) {
+  if (!req.session.user) {
     return next();
   }
   User.findById(req.session.user._id)
@@ -56,18 +56,6 @@ app.use(pageNotFoundController);
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
-    User.findOne().then(user => {
-      if (!user) {
-        const user = new User({
-          name: "Dmitry Marokhonov",
-          email: "dmitry.marokhnonov@gmail.com",
-          cart: {
-            items: []
-          }
-        });
-        user.save();
-      }
-    });
     app.listen(3000);
   })
   .catch(err => console.log(err));
