@@ -36,6 +36,7 @@ html(lang='en')
           ul.main-header__item-list
             li.main-header__item 
               form(action="/logout", method="post")
+                input(type="hidden", name="_csrf", value=`${csrfToken}`)
                 button(type="submit") Logout
           
     block content
@@ -63,5 +64,6 @@ html(lang='en')
         else 
           li.mobile-nav__item
             form(action="/logout", method="post")
+              input(type="hidden", name="_csrf" value=`${csrfToken}`)
               button(type="submit") Logout
         

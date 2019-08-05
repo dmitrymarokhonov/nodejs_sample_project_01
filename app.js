@@ -6,6 +6,8 @@ const favicon = require("serve-favicon");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongodbStore = require("connect-mongodb-session")(session);
+const csrf = require("csurf");
+
 
 const pageNotFoundController = require("./controllers/404");
 const User = require("./models/user");
@@ -20,6 +22,7 @@ const store = new MongodbStore({
   uri: MONGODB_URI,
   collection: "sessions"
 });
+const csrfProtection = csrf();
 
 app.set("view engine", "pug");
 app.set("views", "views");
@@ -33,6 +36,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({ secret: "my secret", resave: false, saveUninitialized: false, store: store })
 );
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
   if (!req.session.user) {
