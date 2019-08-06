@@ -1,6 +1,16 @@
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const sendGridTransport = require("nodemailer-sendgrid-transport");
 
 const User = require("../models/user");
+
+const transporter = nodemailer.createTransport(
+  sendGridTransport({
+    auth: {
+      api_key: "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"
+    }
+  })
+);
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash("error");
@@ -72,17 +82,26 @@ exports.postSignup = (req, res, next) => {
         req.flash("error", "E-mail exists already.");
         return res.redirect("/signup");
       }
-      return bcrypt.hash(password, 12).then(hashPassword => {
-        const user = new User({
-          email: email,
-          password: hashPassword,
-          cart: { items: [] }
-        });
-        return user.save();
-      });
-    })
-    .then(result => {
-      res.redirect("/login");
+      return bcrypt
+        .hash(password, 12)
+        .then(hashPassword => {
+          const user = new User({
+            email: email,
+            password: hashPassword,
+            cart: { items: [] }
+          });
+          return user.save();
+        })
+        .then(result => {
+          res.redirect("/login");
+          return transporter.sendMail({
+            to: email,
+            from: "dm_shop@node-complete.com",
+            subject: "Signup succeeded!",
+            html: "<h1>You successfully signed up!<h1>"
+          });
+        })
+        .catch(err => console.log(err));
     })
     .catch(err => console.log(err));
 };
