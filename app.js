@@ -6,6 +6,9 @@ const favicon = require("serve-favicon");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongodbStore = require("connect-mongodb-session")(session);
+const csrf = require("csurf");
+const flash = require("connect-flash");
+
 
 const pageNotFoundController = require("./controllers/404");
 const User = require("./models/user");
@@ -20,6 +23,7 @@ const store = new MongodbStore({
   uri: MONGODB_URI,
   collection: "sessions"
 });
+const csrfProtection = csrf();
 
 app.set("view engine", "pug");
 app.set("views", "views");
@@ -33,9 +37,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({ secret: "my secret", resave: false, saveUninitialized: false, store: store })
 );
+app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
-  if(!req.session.user) {
+  if (!req.session.user) {
     return next();
   }
   User.findById(req.session.user._id)
@@ -45,6 +51,12 @@ app.use((req, res, next) => {
     })
     .catch(err => console.log(err));
 });
+
+app.use((req,res,next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+})
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -56,18 +68,6 @@ app.use(pageNotFoundController);
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
-    User.findOne().then(user => {
-      if (!user) {
-        const user = new User({
-          name: "Dmitry Marokhonov",
-          email: "dmitry.marokhnonov@gmail.com",
-          cart: {
-            items: []
-          }
-        });
-        user.save();
-      }
-    });
     app.listen(3000);
   })
   .catch(err => console.log(err));

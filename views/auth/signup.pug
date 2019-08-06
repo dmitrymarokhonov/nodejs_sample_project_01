@@ -8,12 +8,15 @@ block content
     main
         if errorMessage
             .user-message.user-message--error= errorMessage
-        form.login-form(action='/login', method='POST')
+        form.login-form(action='/signup', method='POST')
             .form-control
                 label(for='email') E-Mail
                 input#email(type='email', name='email')
             .form-control
                 label(for='password') Password
                 input#password(type='password', name='password')
+            .form-control
+                label(for='confirmPassword') Confirm Password
+                input#confirmPassword(type='password', name='confirmPassword')
             input(type="hidden", name="_csrf", value=`${csrfToken}`)
-            button.btn(type='submit') Login
+            button.btn(type='submit') Signup
