@@ -9,7 +9,7 @@ const User = require("../models/user");
 const transporter = nodemailer.createTransport(
   sendGridTransport({
     auth: {
-      api_key: "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"
+      api_key: "SendGrid API Key cannot be added to public GitHub repo, please replace this string in local run with correct API key"
     }
   })
 );
@@ -139,7 +139,7 @@ exports.postReset = (req, res, next) => {
     User.findOne({ email: req.body.email })
       .then(user => {
         if (!user) {
-          req.flash("error", "No acount with that email found.");
+          req.flash("error", "No account with that email found.");
           return res.redirect("/reset");
         }
         user.resetToken = token;
@@ -148,9 +148,9 @@ exports.postReset = (req, res, next) => {
       })
       .then(result => {
         res.redirect("/");
-        transporter.sendMail({
-          to: req.body.email,
-          from: "dm_shop@node-complete.com",
+        return transporter.sendMail({
+          to: "dmitry.marokhonov@yandex.ru",
+          from: "shop@node-complete.com",
           subject: "Password reset",
           html: `
             <p>You requested a password reset</p>
@@ -158,6 +158,28 @@ exports.postReset = (req, res, next) => {
           `
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+      });
   });
+};
+
+exports.getNewPassword = (req, res, next) => {
+  const token = req.params.token;
+  User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+    .then(user => {
+      let message = req.flash("error");
+      if (message.length > 0) {
+        message = message[0];
+      } else {
+        message = null;
+      }
+      res.render("auth/new-password", {
+        path: "/new-password",
+        docTitle: "New Password",
+        errorMessage: message,
+        userId: user._id.toString()
+      });
+    })
+    .catch(err => console.log(err));
 };
