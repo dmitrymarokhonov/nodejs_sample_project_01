@@ -149,7 +149,7 @@ exports.postReset = (req, res, next) => {
       .then(result => {
         res.redirect("/");
         return transporter.sendMail({
-          to: "dmitry.marokhonov@yandex.ru",
+          to: req.body.email,
           from: "shop@node-complete.com",
           subject: "Password reset",
           html: `
