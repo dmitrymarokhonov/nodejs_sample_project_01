@@ -7,7 +7,30 @@ const User = require("../models/user");
 const router = express.Router();
 
 router.get("/login", authController.getLogin);
-router.post("/login", authController.postLogin);
+router.post(
+  "/login",
+  [
+    check("email")
+      .isEmail()
+      .withMessage("Please enter valid email.")
+      .custom((val, { req }) => {
+        return User.findOne({ email: val }).then(userDoc => {
+          if (!userDoc) {
+            return Promise.reject(
+              "Inserted email is not registered please sign-up as a new user"
+            );
+          }
+        });
+      }),
+    body(
+      "password",
+      "Please enter password with only numbers and text ant at least 5 characters."
+    )
+      .isLength({ min: 5 })
+      .isAlphanumeric()
+  ],
+  authController.postLogin
+);
 
 router.get("/signup", authController.getSignup);
 router.post(
