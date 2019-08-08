@@ -21,13 +21,15 @@ router.post(
             );
           }
         });
-      }),
+      })
+      .normalizeEmail(),
     body(
       "password",
       "Please enter password with only numbers and text ant at least 5 characters."
     )
       .isLength({ min: 5 })
       .isAlphanumeric()
+      .trim()
   ],
   authController.postLogin
 );
@@ -49,14 +51,16 @@ router.post(
             return Promise.reject("E-Mail existst already, please pick another one.");
           }
         });
-      }),
+      })
+      .normalizeEmail(),
     body(
       "password",
       "Please enter a password with only numbers and text and at least 5 characters."
     )
       .isLength({ min: 5 })
+      .trim()
       .isAlphanumeric(),
-    body("confirmPassword").custom((val, { req }) => {
+    body("confirmPassword").trim().custom((val, { req }) => {
       if (val !== req.body.password) {
         throw new Error("Passwords have to match!");
       }
