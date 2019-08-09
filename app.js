@@ -68,7 +68,12 @@ app.use(authRoutes);
 app.use(favicon(path.join(__dirname, "images", "icons8-laptop-50.png")));
 
 app.use("/500", errorController.get500);
+
 app.use(errorController.get404);
+
+app.use((error, req, res, next) => {
+  res.redirect("/500");
+})
 
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true })
