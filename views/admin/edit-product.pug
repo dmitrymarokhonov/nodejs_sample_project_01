@@ -15,13 +15,18 @@ block content
                     name='title'
                     value=(editing || hasError) && `${product.title}`
                     class=validationErrors.find(e => e.param === "title") && "invalid")
+            //- .form-control
+            //-     label(for='imageUrl') Image URL
+            //-     input#imageUrl(
+            //-         type='text'
+            //-         name='imageUrl'
+            //-         value=(editing || hasError) && `${product.imageUrl}`
+            //-         class=validationErrors.find(e => e.param === "imageUrl") && "invalid")
             .form-control
-                label(for='imageUrl') Image URL
-                input#imageUrl(
-                    type='text'
-                    name='imageUrl'
-                    value=(editing || hasError) && `${product.imageUrl}`
-                    class=validationErrors.find(e => e.param === "imageUrl") && "invalid")
+                label(for='image') Image
+                input#image(
+                    type='file'
+                    name='image')
             .form-control
                 label(for='price') Price
                 input#price(
