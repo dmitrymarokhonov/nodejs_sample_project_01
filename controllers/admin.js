@@ -21,13 +21,13 @@ exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
   const description = req.body.description;
-  const imageUrl = req.file;
+  const image = req.file;
 
-  console.log(imageUrl);
+  console.log(image);
 
   if (!image) {
     return res.status(422).render('admin/edit-product', {
-      pageTitle: 'Add Product',
+      docTitle: 'Add Product',
       path: '/admin/add-product',
       editing: false,
       hasError: true,
@@ -53,12 +53,13 @@ exports.postAddProduct = (req, res, next) => {
         title: title,
         price: price,
         description: description,
-        imageUrl: imageUrl
       },
       errorMessage: errors.array()[0].msg,
       validationErrors: errors.array()
     });
   }
+
+  const imageUrl = image.path;
 
   const product = new Product({
     // _id: new mongoose.Types.ObjectId("5d40b0c817372e110e886d3f"),
@@ -128,7 +129,7 @@ exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
-  const updatedImageUrl = req.body.imageUrl;
+  const image = req.file;
   const updatedDesc = req.body.description;
   const errors = validationResult(req);
 
@@ -142,7 +143,6 @@ exports.postEditProduct = (req, res, next) => {
         title: updatedTitle,
         price: updatedPrice,
         description: updatedDesc,
-        imageUrl: updatedImageUrl,
         _id: prodId
       },
       errorMessage: errors.array()[0].msg,
@@ -158,7 +158,9 @@ exports.postEditProduct = (req, res, next) => {
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDesc;
-      product.imageUrl = updatedImageUrl;
+      if(image) {
+        product.imageUrl = image.path;
+      }
       return product.save().then(result => {
         console.log("UPDATED PRODUCT!");
         res.redirect("/admin/products");
