@@ -21,8 +21,8 @@ router.post(
             );
           }
         });
-      })
-      .normalizeEmail(),
+      }),
+      // .normalizeEmail(),
     body(
       "password",
       "Please enter password with only numbers and text ant at least 5 characters."
@@ -51,8 +51,8 @@ router.post(
             return Promise.reject("E-Mail existst already, please pick another one.");
           }
         });
-      })
-      .normalizeEmail(),
+      }),
+      // .normalizeEmail()
     body(
       "password",
       "Please enter a password with only numbers and text and at least 5 characters."
