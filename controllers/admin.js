@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const fileHelper = require("../utils/file");
 const mongoose = require("mongoose");
 
 const Product = require("../models/product");
@@ -26,9 +27,9 @@ exports.postAddProduct = (req, res, next) => {
   console.log(image);
 
   if (!image) {
-    return res.status(422).render('admin/edit-product', {
-      docTitle: 'Add Product',
-      path: '/admin/add-product',
+    return res.status(422).render("admin/edit-product", {
+      docTitle: "Add Product",
+      path: "/admin/add-product",
       editing: false,
       hasError: true,
       product: {
@@ -36,7 +37,7 @@ exports.postAddProduct = (req, res, next) => {
         price: price,
         description: description
       },
-      errorMessage: 'Attached file is not an image.',
+      errorMessage: "Attached file is not an image.",
       validationErrors: []
     });
   }
@@ -52,7 +53,7 @@ exports.postAddProduct = (req, res, next) => {
       product: {
         title: title,
         price: price,
-        description: description,
+        description: description
       },
       errorMessage: errors.array()[0].msg,
       validationErrors: errors.array()
@@ -158,7 +159,8 @@ exports.postEditProduct = (req, res, next) => {
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDesc;
-      if(image) {
+      if (image) {
+        fileHelper.deleteFile(product.imageUrl);
         product.imageUrl = image.path;
       }
       return product.save().then(result => {
@@ -198,8 +200,14 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  // Product.findByIdAndRemove(prodId)
-  Product.deleteOne({ _id: prodId, userId: req.user._id })
+  Product.findById(prodId)
+    .then(product => {
+      if (!product) {
+        return next(new Error("Product not found."));
+      }
+      fileHelper.deleteFile(product.imageUrl);
+      return Product.deleteOne({ _id: prodId, userId: req.user._id });
+    })
     .then(() => {
       console.log("DESTROYED PRODUCT");
       res.redirect("/admin/products");
