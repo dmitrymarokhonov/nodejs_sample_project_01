@@ -29,6 +29,7 @@
     "mysql2": "^1.6.4",
     "nodemailer": "^6.3.0",
     "nodemailer-sendgrid-transport": "^0.2.0",
+    "pdfkit": "^0.10.0",
     "pug": "^2.0.3",
     "sequelize": "^4.42.0",
     "serve-favicon": "^2.5.0"
