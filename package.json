@@ -6,6 +6,9 @@
   "repository": "git@github.com:dmitrymarokhonov/nodejs_sample_project_01.git",
   "author": "dmitry.marokhonov <dmitry.marokhonov@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "10.16.2"
+  },
   "scripts": {
     "dev": "nodemon app.js",
     "start": "MONGO_USER=dmitry MONGO_PASSWORD=OvOTvIZHoxySg5PN MONGO_DEFAULT_DB=shop node app.js"
